@@ -236,7 +236,8 @@ PYEOF
 import sys, json, re
 
 dc_path, project, extra_features_json, forward_ports_json = sys.argv[1:5]
-is_compose = len(sys.argv) > 5 and sys.argv[5] == '1'
+is_compose    = len(sys.argv) > 5 and sys.argv[5] == '1'
+ssh_auth_sock = sys.argv[6] if len(sys.argv) > 6 else ''
 extra_features = json.loads(extra_features_json)
 forward_ports  = json.loads(forward_ports_json)
 
@@ -276,13 +277,19 @@ obj['remoteUser'] = remote_user
 
 # Mount .claude at its literal host path so absolute paths in .claude.json
 # (plugin refs, MCP server scripts) resolve correctly inside the container.
-obj['mounts'] = [
+mounts = [
     'source=${localEnv:HOME}/.claude,target=${localEnv:HOME}/.claude,type=bind,consistency=cached',
     'source=${localEnv:HOME}/.claude.json,target=${localEnv:HOME}/.claude.json,type=bind,consistency=cached',
     'source=${localEnv:HOME}/Projects,target=${localEnv:HOME}/Projects,type=bind,consistency=cached',
 ]
+if ssh_auth_sock:
+    mounts.append('source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind')
+obj['mounts'] = mounts
 
-obj['remoteEnv']         = {'ANTHROPIC_API_KEY': '${localEnv:ANTHROPIC_API_KEY}'}
+remote_env = {'ANTHROPIC_API_KEY': '${localEnv:ANTHROPIC_API_KEY}'}
+if ssh_auth_sock:
+    remote_env['SSH_AUTH_SOCK'] = '/ssh-agent'
+obj['remoteEnv']         = remote_env
 obj['postCreateCommand'] = 'bash .devcontainer/setup.sh'
 obj['forwardPorts']      = forward_ports
 
@@ -316,7 +323,8 @@ PYEOF
     "$project" \
     "$extra_features" \
     "$forward_ports" \
-    "$is_compose"
+    "$is_compose" \
+    "${SSH_AUTH_SOCK:-}"
 
   # ─── Step 4: Generate setup.sh ──────────────────────────────────────────────
 
