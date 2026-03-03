@@ -362,8 +362,9 @@ Rules:
   5. go.mod present → go mod download
   6. Gemfile present → bundle install
   7. pyproject.toml present → uv sync
-  8. requirements.txt only → uv pip install -r requirements.txt
-  9. none matched → echo 'No package manager detected' and skip
+  8. Pipfile present → pip install pipenv && pipenv install
+  9. requirements.txt present → uv venv && uv pip install -r requirements.txt
+  10. none matched → echo 'No package manager detected' and skip
   IMPORTANT: pick exactly ONE. Do NOT run multiple package managers.
 - After deps, symlink claude binary to native installer path for current user:
     mkdir -p \"\$HOME/.local/bin\"
