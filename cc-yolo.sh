@@ -414,4 +414,4 @@ else
 fi
 
 print "→ Attaching to container $container_id ($PWD)" >&2
-devcontainer exec --workspace-folder . claude --dangerously-skip-permissions --continue
+devcontainer exec --workspace-folder . claude --dangerously-skip-permissions
