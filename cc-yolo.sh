@@ -281,6 +281,7 @@ mounts = [
     'source=${localEnv:HOME}/.claude,target=${localEnv:HOME}/.claude,type=bind,consistency=cached',
     'source=${localEnv:HOME}/.claude.json,target=${localEnv:HOME}/.claude.json,type=bind,consistency=cached',
     'source=${localEnv:HOME}/Projects,target=${localEnv:HOME}/Projects,type=bind,consistency=cached',
+    'source=${localEnv:HOME}/.gitconfig,target=${localEnv:HOME}/.gitconfig,type=bind,consistency=cached',
 ]
 if ssh_auth_sock:
     mounts.append('source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind')
@@ -405,4 +406,4 @@ else
   print "→ Container already running ($container_id), skipping devcontainer up." >&2
 fi
 
-devcontainer exec --workspace-folder . claude --dangerously-skip-permissions
+devcontainer exec --workspace-folder . claude --dangerously-skip-permissions --continue
