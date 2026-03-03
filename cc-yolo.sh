@@ -400,11 +400,18 @@ fi
 
 # ─── Start container + launch Claude Code ────────────────────────────────────
 
-container_id=$(docker ps --filter "label=devcontainer.local_folder=$PWD" --format '{{.ID}}' 2>/dev/null | head -1)
+_container_for_pwd() {
+  docker ps --filter "label=devcontainer.local_folder=$PWD" --format '{{.ID}}' 2>/dev/null | head -1
+}
+
+container_id=$(_container_for_pwd)
 if (( reset )) || [[ -z "$container_id" ]]; then
   devcontainer up ${reset:+--remove-existing-container} --workspace-folder .
+  container_id=$(_container_for_pwd)
+  [[ -z "$container_id" ]] && { print "✗ No running container found for $PWD after devcontainer up." >&2; exit 1; }
 else
   print "→ Container already running ($container_id), skipping devcontainer up." >&2
 fi
 
+print "→ Attaching to container $container_id ($PWD)" >&2
 devcontainer exec --workspace-folder . claude --dangerously-skip-permissions --continue
