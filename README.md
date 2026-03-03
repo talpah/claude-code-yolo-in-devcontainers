@@ -12,18 +12,22 @@ One command to drop Claude Code in YOLO mode into any project via a devcontainer
 
 Your `~/.claude` config, plugins, and `~/Projects` are bind-mounted at their exact host paths so Claude Code works identically to your host setup.
 
-## Requirements
-
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code/getting-started) (`claude`)
-- [devcontainer CLI](https://github.com/devcontainers/cli) (`npm i -g @devcontainers/cli`)
-- Docker
-- `jq`, `python3`, `curl`
-
 ## Install
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/talpah/claude-code-yolo-in-devcontainers/main/install.sh | sh
 ```
+
+The installer checks for all requirements and offers to install any that are missing:
+
+| Requirement | Auto-install |
+|---|---|
+| `curl` | — (needed to run the installer) |
+| `python3` | apt / Homebrew |
+| `jq` | apt / Homebrew |
+| [Docker](https://docs.docker.com/engine/install/) | links to docs |
+| [devcontainer CLI](https://github.com/devcontainers/cli) | `npm i -g @devcontainers/cli` |
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code/getting-started) | native installer |
 
 ## Usage
 
