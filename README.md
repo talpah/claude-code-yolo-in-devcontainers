@@ -10,7 +10,7 @@ One command to drop Claude Code in YOLO mode into any project via a devcontainer
 4. Starts the container (reuses it on subsequent runs)
 5. Launches Claude Code with `--dangerously-skip-permissions`
 
-Your `~/.claude` config, plugins, and `~/Projects` are bind-mounted at their exact host paths so Claude Code works identically to your host setup.
+Your `~/.claude` config, plugins, and gitconfig are bind-mounted at their exact host paths so Claude Code works identically to your host setup.
 
 ## Install
 
@@ -50,9 +50,18 @@ cc-yolo --reset  # regenerate .devcontainer from scratch and rebuild
 |---|---|
 | `~/.claude` | `~/.claude` (same path) |
 | `~/.claude.json` | `~/.claude.json` (same path) |
-| `~/Projects` | `~/Projects` (same path) |
+| `~/.gitconfig` | `~/.gitconfig` (same path) |
+| `$CC_YOLO_PROJECTS_DIR` | same path (only if set) |
 
 Mounting at the exact host path ensures all plugin paths, MCP server scripts, and tool configurations in `.claude.json` resolve correctly inside the container.
+
+## Environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | — | **Required.** Your Anthropic API key. |
+| `CC_YOLO_PROJECTS_DIR` | (unset) | If set, bind-mounts this directory at the same path inside the container. Useful for cross-project context when Claude's config references other projects. |
+| `GITHUB_TOKEN` | (unset) | Optional. Raises the GitHub API rate limit from 60 to 5,000 req/hr during template and feature discovery. |
 
 ## Uninstall
 
