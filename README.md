@@ -18,7 +18,7 @@ Your `~/.claude` config, plugins, and gitconfig are bind-mounted at their exact 
 curl -fsSL https://raw.githubusercontent.com/talpah/claude-code-yolo-in-devcontainers/main/install.sh | sh
 ```
 
-The installer checks for all requirements and offers to install any that are missing:
+The script runs on any POSIX-compatible shell (`/bin/sh`). The installer checks for all requirements and offers to install any that are missing:
 
 | Requirement | Auto-install |
 |---|---|
@@ -28,6 +28,7 @@ The installer checks for all requirements and offers to install any that are mis
 | [Docker](https://docs.docker.com/engine/install/) | links to docs |
 | [devcontainer CLI](https://github.com/devcontainers/cli) | `npm i -g @devcontainers/cli` |
 | [Claude Code](https://docs.anthropic.com/en/docs/claude-code/getting-started) | native installer |
+| `shellcheck` | optional — validates the generated `setup.sh` if present |
 
 ## Usage
 
@@ -51,6 +52,7 @@ cc-yolo --reset  # regenerate .devcontainer from scratch and rebuild
 | `~/.claude` | `~/.claude` (same path) |
 | `~/.claude.json` | `~/.claude.json` (same path) |
 | `~/.gitconfig` | `~/.gitconfig` (same path) |
+| `$SSH_AUTH_SOCK` | `/ssh-agent` (only if set) |
 | `$CC_YOLO_PROJECTS_DIR` | same path (only if set) |
 
 Mounting at the exact host path ensures all plugin paths, MCP server scripts, and tool configurations in `.claude.json` resolve correctly inside the container.
